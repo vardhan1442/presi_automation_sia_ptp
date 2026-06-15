@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup and Trigger Run</title>
+  <link rel="stylesheet" href="styles/dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Setup Environment and Trigger Run</h1>
+      <p>Prepare the environment, validate input collateral, and trigger the verification flow.</p>
+    </div>
+
+    <div class="panel">
+      <div class="btn-row">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="analysis.html">Verification Analysis</a>
+        <a class="nav-link" href="dashboard.html">Work Dashboard</a>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Environment Setup Checklist</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Description</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Select / validate run directory</td><td>Pending</td></tr>
+            <tr><td>2</td><td>Confirm LIP tracker files are present</td><td>Pending</td></tr>
+            <tr><td>3</td><td>Confirm .lst file is present</td><td>Pending</td></tr>
+            <tr><td>4</td><td>Confirm platform CSV is present</td><td>Pending</td></tr>
+            <tr><td>5</td><td>Confirm scenario JSON is present</td><td>Pending</td></tr>
+            <tr><td>6</td><td>Determine workload / model type</td><td>Pending</td></tr>
+            <tr><td>7</td><td>Trigger verification run</td><td>Pending</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Run Command</div>
+      <div class="subtle">Example command based on the provided automation script:</div>
+      <div class="kv-block">python3.11.1 verification.py -r /path/to/run_dir</div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Input Requirements</div>
+      <div class="kv-block">
+Expected inputs:
+- Run directory
+- lip_tracker*.log*
+- stream*.lst / do*.lst / related lst
+- Platform*.csv
+- perspec_scenario_*.json
+
+The automation script validates these before proceeding.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Setup Notes</div>
+      <div class="kv-block" contenteditable="true">
+Add setup instructions here:
+- environment variables
+- package/module requirements
+- command alias
+- decompression behavior
+- output location
+      </div>
+    </div>
+  </div>
+</body>
+</html>

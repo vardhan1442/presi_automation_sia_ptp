@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work Done Dashboard</title>
+  <link rel="stylesheet" href="styles/dashboard.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Work Done Dashboard</h1>
+      <p>Track completed work, execution status, findings, and next actions.</p>
+    </div>
+
+    <div class="panel">
+      <div class="btn-row">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="setup.html">Setup</a>
+        <a class="nav-link" href="analysis.html">Verification Analysis</a>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="card">
+        <div class="stat-title">Runs Executed</div>
+        <div class="stat-value">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-title">Reports Generated</div>
+        <div class="stat-value">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-title">Issues Found</div>
+        <div class="stat-value">0</div>
+      </div>
+      <div class="card">
+        <div class="stat-title">Pending Actions</div>
+        <div class="stat-value">0</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="table-card">
+        <div class="section-title">Completed Work Items</div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Status</th>
+                <th>Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Environment setup</td><td>Pending</td><td>-</td></tr>
+              <tr><td>2</td><td>Verification analysis</td><td>Pending</td><td>-</td></tr>
+              <tr><td>3</td><td>Dashboard review</td><td>Pending</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="section-title">Notes / Summary</div>
+        <div class="kv-block" contenteditable="true">
+Add work summary here:
+- what was completed
+- main observations
+- blockers
+- next steps
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section-title">Next Actions</div>
+      <div class="kv-block" contenteditable="true">
+- Add execution history
+- Add owner-wise task summary
+- Add links to analysis outputs
+- Add run status tracking
+      </div>
+    </div>
+  </div>
+</body>
+</html>

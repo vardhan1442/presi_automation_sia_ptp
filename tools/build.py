@@ -1,7 +1,7 @@
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-template_path = ROOT / "index.html"
+template_path = ROOT / "index.template.html"
 sections_dir = ROOT / "sections"
 dist_dir = ROOT / "dist"
 dist_dir.mkdir(exist_ok=True)

@@ -3,26 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verification BW Dashboard</title>
-  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+  <title>Verification Automation Portal</title>
   <link rel="stylesheet" href="styles/dashboard.css" />
+  <style>
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .nav-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+    }
+
+    .nav-card h2 {
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      color: #111827;
+    }
+
+    .nav-card p {
+      color: #6b7280;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .nav-link {
+      display: inline-block;
+      text-decoration: none;
+      background: #2563eb;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .top-nav {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .top-nav a {
+      text-decoration: none;
+      color: #1d4ed8;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    {{01_header}}
-    {{02_primary_input}}
-    {{03_graph_override}}
-    {{04_meta_summary}}
-    {{05_idi_metrics}}
-    {{06_ddr_metrics}}
-    {{07_loop_info}}
-    {{08_charts}}
-    {{09_opcode_platform_scenario}}
-    {{10_config}}
-    {{11_debug_log}}
-    {{12_footer}}
-  </div>
+    <div class="header">
+      <h1>Verification Automation Portal</h1>
+      <p>Use this portal to set up runs, analyze verification outputs, and review dashboard summaries.</p>
+    </div>
 
-  <script src="scripts/app.js"></script>
+    <div class="panel">
+      <div class="section-title">Quick Navigation</div>
+      <div class="subtle">Choose the area you want to work in.</div>
+
+      <div class="home-grid">
+        <div class="nav-card">
+          <h2>1. Setting up the environment and triggering the run</h2>
+          <p>
+            Use this section to document prerequisites, environment setup, expected input folders,
+            run command flow, and how to trigger the verification automation.
+          </p>
+          <a class="nav-link" href="setup.html">Open Setup Page</a>
+        </div>
+
+        <div class="nav-card">
+          <h2>2. Verification analysis</h2>
+          <p>
+            Use the analysis page for loading run/results directories, viewing IDI and DDR graphs,
+            loop analysis, opcode tables, metadata, platform/scenario details, and logs.
+          </p>
+          <a class="nav-link" href="analysis.html">Open Analysis Page</a>
+        </div>
+
+        <div class="nav-card">
+          <h2>3. Dashboard for the work done</h2>
+          <p>
+            Use this section to summarize completed work, execution status, outputs generated,
+            run history, notes, and project progress at a glance.
+          </p>
+          <a class="nav-link" href="dashboard.html">Open Work Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
