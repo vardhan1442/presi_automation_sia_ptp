@@ -1,0 +1,19 @@
+<div class="panel">
+  <div class="section-title">Optional Manual Graph Override</div>
+  <div class="subtle">Graph 1 replaces IDI. Graph 2 replaces DDR.</div>
+
+  <div class="upload-grid" style="margin-top:16px;">
+    <div>
+      <label for="graph1File">Graph 1 File (IDI override)</label>
+      <input type="file" id="graph1File" accept=".txt,.csv,.gz" />
+    </div>
+    <div>
+      <label for="graph2File">Graph 2 File (DDR override)</label>
+      <input type="file" id="graph2File" accept=".txt,.csv,.gz" />
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="applyGraphFiles()">Apply Graph Overrides</button>
+  </div>
+</div>

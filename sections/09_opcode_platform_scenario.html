@@ -1,0 +1,83 @@
+<div class="two-col">
+  <div class="table-card">
+    <div class="section-title">IDI Opcode Stats</div>
+    <div id="idiOpcodeChart" class="small-chart"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Opcode</th><th>Value</th></tr>
+        </thead>
+        <tbody id="idiOpcodeBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="section-title">DDR Read / Write / Opcode Stats</div>
+    <div class="stats-grid" style="margin-bottom:16px;">
+      <div class="card"><div class="stat-title">DDR Read Count</div><div class="stat-value" id="ddrReadCount">-</div></div>
+      <div class="card"><div class="stat-title">DDR Write Count</div><div class="stat-value" id="ddrWriteCount">-</div></div>
+    </div>
+    <div id="ddrRwChart" class="small-chart"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>DDR Opcode</th><th>Value</th></tr>
+        </thead>
+        <tbody id="ddrOpcodeBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="table-card">
+    <div class="section-title">Platform Thread Mapping</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tag</th>
+            <th>APIC ID</th>
+            <th>Cluster</th>
+            <th>Cluster ID</th>
+            <th>Core ID</th>
+            <th>Enabled</th>
+            <th>Kind</th>
+            <th>Package ID</th>
+          </tr>
+        </thead>
+        <tbody id="platformBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="section-title">Scenario Traffic Per Thread</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Thread</th>
+            <th>Traffic</th>
+          </tr>
+        </thead>
+        <tbody id="trafficBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="two-col">
+  <div class="table-card">
+    <div class="section-title">Memory JSON / Scenario Values</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Values</th></tr>
+        </thead>
+        <tbody id="memoryJsonBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>

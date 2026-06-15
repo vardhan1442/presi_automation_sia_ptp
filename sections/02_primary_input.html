@@ -1,0 +1,15 @@
+<div class="panel">
+  <div class="section-title">Primary Input</div>
+  <label for="runFolder">Run Directory or Results Directory</label>
+  <input type="file" id="runFolder" webkitdirectory directory multiple />
+
+  <div class="btn-row">
+    <button id="loadDirBtn" class="btn-primary" onclick="loadSelectedDirectory()">Load Directory</button>
+    <button class="btn-primary" onclick="loadDemoData()">Load Demo</button>
+    <button class="btn-secondary" onclick="clearDashboard()">Clear</button>
+  </div>
+</div>
+
+<div id="statusBox" class="status-box">
+  Select either the original run directory or a generated results directory. The dashboard will auto-detect available files.
+</div>
