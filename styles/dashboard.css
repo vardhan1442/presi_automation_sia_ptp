@@ -66,7 +66,7 @@ body {
   margin-bottom: 8px;
 }
 
-.meta-grid, .stats-grid, .upload-grid, .loop-grid, .two-col, .three-col {
+.meta-grid, .stats-grid, .upload-grid, .controls-grid, .loop-grid, .two-col, .three-col {
   display: grid;
   gap: 16px;
   margin-bottom: 20px;
@@ -82,6 +82,10 @@ body {
 
 .upload-grid {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.controls-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 .loop-grid {
@@ -265,3 +269,10 @@ tbody tr.clickable:hover {
 .nav-link:hover {
   background: #1d4ed8;
 }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+

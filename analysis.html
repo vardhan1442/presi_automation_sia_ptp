@@ -8,30 +8,42 @@
   <link rel="stylesheet" href="styles/dashboard.css" />
 </head>
 <body>
+  <!-- Cache restore banner (shown when data is auto-restored from localStorage) -->
+  <div id="cacheBanner" style="display:none;position:sticky;top:0;z-index:999;background:#1e3a5f;color:#e2e8f0;padding:6px 14px;align-items:center;gap:8px;border-bottom:1px solid #2563eb;"></div>
+
   <div class="container">
     <div class="panel">
       <div class="btn-row">
         <a class="nav-link" href="index.html">Home</a>
         <a class="nav-link" href="setup.html">Setup</a>
-        <a class="nav-link" href="dashboard.html">Work Dashboard</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
       </div>
+      <div id="connBadge"></div>
     </div>
 
     <div data-include="sections/01_header.html"></div>
     <div data-include="sections/02_primary_input.html"></div>
+    <div data-include="sections/02b_stations.html"></div>
     <div data-include="sections/03_graph_override.html"></div>
+    <div data-include="sections/03b_analysis_controls.html"></div>
     <div data-include="sections/04_meta_summary.html"></div>
     <div data-include="sections/05_idi_metrics.html"></div>
     <div data-include="sections/06_ddr_metrics.html"></div>
     <div data-include="sections/07_loop_info.html"></div>
     <div data-include="sections/08_charts.html"></div>
+    <div data-include="sections/08b_bw_preview.html"></div>
     <div data-include="sections/09_opcode_platform_scenario.html"></div>
     <div data-include="sections/10_config.html"></div>
+    <div data-include="sections/13_peripheral_metrics.html"></div>
+    <div data-include="sections/14_dbp_clock_metrics.html"></div>
+    <div data-include="sections/15_cbo_tracker.html"></div>
+    <div data-include="sections/16_xmon_latency.html"></div>
     <div data-include="sections/11_debug_log.html"></div>
     <div data-include="sections/12_footer.html"></div>
   </div>
 
   <script src="scripts/includes.js"></script>
+  <script src="scripts/connection.js"></script>
   <script src="scripts/app.js"></script>
 </body>
 </html>

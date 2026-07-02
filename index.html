@@ -3,14 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verification Automation Portal</title>
+  <title>SIA PTP Automation Portal</title>
   <link rel="stylesheet" href="styles/dashboard.css" />
   <style>
+    .home-hero {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      padding: 36px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .home-hero h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .home-hero p {
+      color: #dbeafe;
+      font-size: 1rem;
+      max-width: 900px;
+      line-height: 1.6;
+    }
+
     .home-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      margin-top: 24px;
+      margin-top: 20px;
     }
 
     .nav-card {
@@ -35,11 +56,11 @@
 
     .nav-card p {
       color: #6b7280;
+      line-height: 1.55;
       margin-bottom: 18px;
-      line-height: 1.5;
     }
 
-    .nav-link {
+    .nav-btn {
       display: inline-block;
       text-decoration: none;
       background: #2563eb;
@@ -49,79 +70,219 @@
       font-weight: 700;
     }
 
-    .top-nav {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
+    .nav-btn:hover {
+      background: #1d4ed8;
     }
 
-    .top-nav a {
-      text-decoration: none;
-      color: #1d4ed8;
-      font-weight: 600;
+    .info-panel {
+      margin-top: 24px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-<<<<<<< HEAD
-    <div class="header">
-      <h1>Verification Automation Portal</h1>
-      <p>Use this portal to set up runs, analyze verification outputs, and review dashboard summaries.</p>
+    <div class="home-hero">
+      <h1>SIA PTP Automation Tool</h1>
+      <p>
+        This portal is organized into three focused areas: environment setup and run triggering,
+        verification analysis, and dashboard-based work tracking. Use the sections below to navigate
+        to the workflow you need.
+      </p>
     </div>
 
     <div class="panel">
-      <div class="section-title">Quick Navigation</div>
-      <div class="subtle">Choose the area you want to work in.</div>
+      <div class="btn-row">
+        <a class="nav-link" href="setup.html">Setup</a>
+        <a class="nav-link" href="analysis.html">Analysis</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+      </div>
+      <div id="connBadge"></div>
+    </div>
+      <div class="subtle">Choose one of the workflow sections below.</div>
 
       <div class="home-grid">
         <div class="nav-card">
-          <h2>1. Setting up the environment and triggering the run</h2>
+          <h2>1. Setup Environment and Trigger Run</h2>
           <p>
-            Use this section to document prerequisites, environment setup, expected input folders,
-            run command flow, and how to trigger the verification automation.
+            Prepare the environment, validate required input files, review execution prerequisites,
+            and trigger the verification flow.
           </p>
-          <a class="nav-link" href="setup.html">Open Setup Page</a>
+          <a class="nav-btn" href="setup.html">Go to Setup</a>
         </div>
 
         <div class="nav-card">
-          <h2>2. Verification analysis</h2>
+          <h2>2. Verification Analysis</h2>
           <p>
-            Use the analysis page for loading run/results directories, viewing IDI and DDR graphs,
-            loop analysis, opcode tables, metadata, platform/scenario details, and logs.
+            Open the dedicated analysis workspace for run loading, IDI and DDR bandwidth inspection,
+            loop analysis, opcode review, metadata exploration, and debug logs.
           </p>
-          <a class="nav-link" href="analysis.html">Open Analysis Page</a>
+          <a class="nav-btn" href="analysis.html">Go to Analysis</a>
         </div>
 
         <div class="nav-card">
-          <h2>3. Dashboard for the work done</h2>
+          <h2>3. Dashboard for Work Done</h2>
           <p>
-            Use this section to summarize completed work, execution status, outputs generated,
-            run history, notes, and project progress at a glance.
+            Review summarized work status, completed tasks, findings, execution notes,
+            and next-step tracking in one place.
           </p>
-          <a class="nav-link" href="dashboard.html">Open Work Dashboard</a>
+          <a class="nav-btn" href="dashboard.html">Go to Dashboard</a>
         </div>
       </div>
     </div>
-  </div>
-=======
-    <div data-include="sections/01_header.html"></div>
-    <div data-include="sections/02_primary_input.html"></div>
-    <div data-include="sections/03_graph_override.html"></div>
-    <div data-include="sections/04_meta_summary.html"></div>
-    <div data-include="sections/05_idi_metrics.html"></div>
-    <div data-include="sections/06_ddr_metrics.html"></div>
-    <div data-include="sections/07_loop_info.html"></div>
-    <div data-include="sections/08_charts.html"></div>
-    <div data-include="sections/09_opcode_platform_scenario.html"></div>
-    <div data-include="sections/10_config.html"></div>
-    <div data-include="sections/11_debug_log.html"></div>
-    <div data-include="sections/12_footer.html"></div>
+
+    <div class="panel info-panel">
+      <div class="section-title">&#128279; Remote SSH Connection</div>
+      <p class="subtle" style="margin-bottom:16px;">
+        Configure once here — all pages (Analysis, Setup, Dashboard) will use these credentials automatically.
+      </p>
+
+      <div style="display:grid; grid-template-columns:2fr 0.5fr 1.2fr; gap:12px; margin-bottom:12px;">
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Host</label>
+          <input id="ci_host" type="text" placeholder="10.x.x.x"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Port</label>
+          <input id="ci_port" type="number" value="22"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">User</label>
+          <input id="ci_user" type="text" placeholder="username"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Private Key Path <span style="font-weight:400; color:#6b7280;">(optional if using password)</span></label>
+        <input id="ci_key" type="text" value="~/.ssh/id_ed25519"
+               style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Password <span style="font-weight:400; color:#6b7280;">(optional — stored in session only, cleared on tab close)</span></label>
+        <input id="ci_password" type="password" placeholder="SSH password (if not using key auth)"
+               style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button onclick="connSaveAndTest()"
+                style="padding:9px 20px; background:#2563eb; color:white; border:none; border-radius:10px; font-size:0.9rem; font-weight:700; cursor:pointer;">
+          &#9654;&nbsp; Save &amp; Test Connection
+        </button>
+        <button onclick="connSaveOnly()"
+                style="padding:9px 16px; background:white; color:#374151; border:1px solid #cbd5e1; border-radius:10px; font-size:0.9rem; font-weight:600; cursor:pointer;">
+          Save
+        </button>
+        <span id="ci_status" style="display:none; padding:6px 14px; border-radius:999px; font-size:0.83rem; font-weight:700;"></span>
+      </div>
+
+      <p class="subtle" style="margin-top:12px;">
+        Bridge server must be running:&nbsp;
+        <code style="background:#f1f5f9; padding:2px 6px; border-radius:6px; font-size:0.82rem;">python tools/server.py</code>
+      </p>
+    </div>
+
+    <div class="panel info-panel">
+      <div class="section-title">Recommended Workflow</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Page</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Setup</td>
+              <td>Prepare inputs, validate prerequisites, and trigger the run</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Analysis</td>
+              <td>Inspect verification results, graphs, loops, metadata, and logs</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Dashboard</td>
+              <td>Track completed work, observations, and next actions</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <script src="scripts/includes.js"></script>
-  <script src="scripts/app.js"></script>
->>>>>>> 4bc2c0872255171080c0609cb3d737aac43eb515
+  <script src="scripts/connection.js"></script>
+  <script>
+    // ── Connection panel logic (index.html only) ────────────────────────────
+
+    function connFillForm() {
+      const c = connLoad();
+      if (!c) return;
+      document.getElementById("ci_host").value     = c.host     || "";
+      document.getElementById("ci_port").value     = c.port     || 22;
+      document.getElementById("ci_user").value     = c.user     || "";
+      document.getElementById("ci_key").value      = c.key_path || "~/.ssh/id_ed25519";
+      // Password lives in sessionStorage only (not persisted across tab close)
+      const savedPass = sessionStorage.getItem("ptp_ssh_pass") || "";
+      document.getElementById("ci_password").value = savedPass;
+    }
+
+    function connReadForm() {
+      const pass = document.getElementById("ci_password").value;
+      if (pass) sessionStorage.setItem("ptp_ssh_pass", pass);
+      else sessionStorage.removeItem("ptp_ssh_pass");
+      return {
+        host:     document.getElementById("ci_host").value.trim(),
+        port:     Number(document.getElementById("ci_port").value) || 22,
+        user:     document.getElementById("ci_user").value.trim(),
+        key_path: document.getElementById("ci_key").value.trim() || "~/.ssh/id_ed25519",
+      };
+    }
+
+    function setConnStatus(msg, state) {
+      const el = document.getElementById("ci_status");
+      if (!el) return;
+      el.style.display = "inline-block";
+      const s = {
+        ok:      { bg:"#dcfce7", color:"#166534" },
+        error:   { bg:"#fef2f2", color:"#b91c1c" },
+        loading: { bg:"#eff6ff", color:"#1d4ed8" },
+        idle:    { bg:"#f3f4f6", color:"#374151" },
+      }[state] || { bg:"#f3f4f6", color:"#374151" };
+      el.style.background = s.bg;
+      el.style.color      = s.color;
+      el.textContent = msg;
+    }
+
+    function connSaveOnly() {
+      const cfg = connReadForm();
+      if (!cfg.host) { setConnStatus("Host is required.", "error"); return; }
+      connSave(cfg);
+      setConnStatus("Saved.", "ok");
+      connRenderBadge();
+    }
+
+    async function connSaveAndTest() {
+      const cfg = connReadForm();
+      if (!cfg.host) { setConnStatus("Host is required.", "error"); return; }
+      connSave(cfg);
+      connRenderBadge();
+      setConnStatus("Connecting…", "loading");
+      try {
+        const data = await connTest(cfg);
+        setConnStatus(`✓ Connected — ${data.hostname} (${data.user})`, "ok");
+      } catch (e) {
+        setConnStatus(`✗ ${e.message}`, "error");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", connFillForm);
+  </script>
 </body>
 </html>

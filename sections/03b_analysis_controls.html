@@ -1,0 +1,55 @@
+<div class="panel">
+  <div class="section-title">Analysis Controls</div>
+  <div class="controls-grid">
+    <div>
+      <label for="xMode">X-Axis Mode</label>
+      <select id="xMode">
+        <option value="time">Timestamp</option>
+        <option value="index">Sample Index</option>
+      </select>
+    </div>
+    <div>
+      <label for="rangeStart">Range Start</label>
+      <input type="number" id="rangeStart" placeholder="Start value" />
+    </div>
+    <div>
+      <label for="rangeEnd">Range End</label>
+      <input type="number" id="rangeEnd" placeholder="End value" />
+    </div>
+    <div>
+      <label for="showIdiRead">IDI Read BW</label>
+      <select id="showIdiRead">
+        <option value="on">Show</option>
+        <option value="off">Hide</option>
+      </select>
+    </div>
+    <div>
+      <label for="showIdiWrite">IDI Write BW</label>
+      <select id="showIdiWrite">
+        <option value="on">Show</option>
+        <option value="off">Hide</option>
+      </select>
+    </div>
+    <div>
+      <label for="showDdrRead">DDR Read BW</label>
+      <select id="showDdrRead">
+        <option value="on">Show</option>
+        <option value="off">Hide</option>
+      </select>
+    </div>
+    <div>
+      <label for="showDdrWrite">DDR Write BW</label>
+      <select id="showDdrWrite">
+        <option value="on">Show</option>
+        <option value="off">Hide</option>
+      </select>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="applyAnalysisControls()">Apply</button>
+    <button class="btn-secondary" onclick="resetAnalysisControls()">Reset</button>
+  </div>
+  <div class="highlight" id="visibleRangeInfo" style="margin-top:12px;">
+    Visible range metrics are based on the full graph range.
+  </div>
+</div>

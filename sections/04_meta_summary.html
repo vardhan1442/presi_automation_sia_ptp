@@ -16,6 +16,26 @@
     <div class="card"><div class="stat-title">Test End DDR</div><div class="stat-value" id="testEndDdr">-</div></div>
     <div class="card"><div class="stat-title">Threads</div><div class="stat-value" id="threadsValue">-</div></div>
     <div class="card"><div class="stat-title">Cores</div><div class="stat-value" id="coresValue">-</div></div>
+    <div class="card"><div class="stat-title">Lsz (r10)</div><div class="stat-value" id="lszValue">-</div></div>
+    <div class="card"><div class="stat-title">Loops (r13)</div><div class="stat-value" id="loopsValue">-</div></div>
+  </div>
+
+  <!-- Parsed IDI line detail -->
+  <div style="margin-top:14px; margin-bottom:4px;">
+    <div class="subtle" style="margin-bottom:4px;">Test Start IDI &mdash; parsed fields</div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table id="testStartParsedTable" style="font-size:0.8rem;">
+        <thead><tr id="testStartParsedHead"></tr></thead>
+        <tbody><tr id="testStartParsedRow"></tr></tbody>
+      </table>
+    </div>
+    <div class="subtle" style="margin-bottom:4px; margin-top:10px;">Test End IDI &mdash; parsed fields</div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table id="testEndParsedTable" style="font-size:0.8rem;">
+        <thead><tr id="testEndParsedHead"></tr></thead>
+        <tbody><tr id="testEndParsedRow"></tr></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="two-col" style="margin-top:16px;">
@@ -28,4 +48,38 @@
       <div class="kv-block" id="runModelBlock">-</div>
     </div>
   </div>
+</div>
+
+<!-- Directory Timeline — populated automatically from ls -l on the remote host -->
+<div class="panel" id="dirTimelinePanel" style="display:none;">
+  <div class="section-title">Directory Timeline</div>
+  <div class="subtle" style="margin-bottom:12px;">
+    Modification timestamps captured automatically via <code>stat</code> on the remote host.
+    <code>testStart</code> / <code>testEnd</code> fields are back-filled from these when not present in the JSON.
+  </div>
+
+  <div class="table-wrap" style="margin-bottom:16px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Directory / File</th>
+          <th style="color:#059669;">Created (remote)</th>
+          <th style="color:#2563eb;">Last Modified (remote)</th>
+        </tr>
+      </thead>
+      <tbody id="dirTimesBody"></tbody>
+    </table>
+  </div>
+
+  <details>
+    <summary style="cursor:pointer; font-size:0.88rem; font-weight:700; color:#374151; margin-bottom:8px;">
+      &#128196;&nbsp; Raw <code>ls -la</code> output
+    </summary>
+    <pre id="lsOutputBlock"
+         style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;
+                padding:12px; font-size:0.8rem; overflow-x:auto; max-height:320px;
+                overflow-y:auto; margin-top:8px; color:#1f2937;">
+(not loaded)
+    </pre>
+  </details>
 </div>

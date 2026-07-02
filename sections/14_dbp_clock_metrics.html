@@ -1,0 +1,84 @@
+<!-- DBP Stats (IDI + SOC_CFI) and Clock Frequency -->
+<!-- DBP_infoS, DBP_infoS_SOC, Clock from pons_verification.py -->
+
+<div class="two-col">
+
+  <!-- DBP @ IDI -->
+  <div class="table-card">
+    <div class="section-title">DBP Stats @ IDI
+      <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+        GO_* transactions from idi*.log — DBP (Data Buffer Prefetch) distribution
+      </span>
+    </div>
+    <!-- mini bar chart -->
+    <div id="dbpIdiChart" style="width:100%;height:200px;margin-bottom:12px;"></div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Count</th>
+            <th>Field 1</th>
+            <th>Field 2</th>
+            <th>Field 3</th>
+          </tr>
+        </thead>
+        <tbody id="dbpIdiBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DBP @ SOC_CFI -->
+  <div class="table-card">
+    <div class="section-title">DBP Stats @ SOC_CFI
+      <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+        pre=* / dbp_params from SOC_CFI_trk.log
+      </span>
+    </div>
+    <!-- mini bar chart -->
+    <div id="dbpSocChart" style="width:100%;height:200px;margin-bottom:12px;"></div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Count</th>
+            <th>Field 1</th>
+            <th>Field 2</th>
+            <th>Field 3</th>
+          </tr>
+        </thead>
+        <tbody id="dbpSocBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Clock Frequency Section -->
+<div class="panel" style="margin-top:16px;">
+  <div class="section-title">Clock Frequency Summary
+    <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+      Frequency change events parsed from logbook — grouped by frequency
+    </span>
+  </div>
+
+  <!-- clock bar chart -->
+  <div id="clockChart" style="width:100%;height:240px;margin-bottom:16px;"></div>
+
+  <div class="table-wrap" style="overflow-x:auto;">
+    <table id="clockTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Frequency / Entry</th>
+          <th>Detail</th>
+        </tr>
+      </thead>
+      <tbody id="clockBody"></tbody>
+    </table>
+  </div>
+
+  <details style="margin-top:10px;">
+    <summary class="subtle" style="cursor:pointer;user-select:none;">&#9654; Raw Clock Data</summary>
+    <pre class="kv-block" id="clockRawBlock" style="max-height:200px;overflow-y:auto;">-</pre>
+  </details>
+</div>

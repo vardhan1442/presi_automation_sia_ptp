@@ -1,19 +1,106 @@
 <div class="panel">
   <div class="section-title">Optional Manual Graph Override</div>
-  <div class="subtle">Graph 1 replaces IDI. Graph 2 replaces DDR.</div>
+  <div class="subtle" style="margin-bottom:14px;">Graph 1 replaces IDI &nbsp;·&nbsp; Graph 2 replaces DDR.</div>
 
-  <div class="upload-grid" style="margin-top:16px;">
-    <div>
-      <label for="graph1File">Graph 1 File (IDI override)</label>
-      <input type="file" id="graph1File" accept=".txt,.csv,.gz" />
+  <!-- Mode tabs -->
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;" id="graphOverrideModeBtns">
+    <button class="station-src-btn station-src-active" data-mode="local" onclick="graphOverrideSelectMode('local')">&#128193;&nbsp; Local File</button>
+    <button class="station-src-btn"                    data-mode="ssh"   onclick="graphOverrideSelectMode('ssh')">&#128279;&nbsp; SSH Remote</button>
+  </div>
+
+  <!-- ── Local File mode ──────────────────────────────────────────────── -->
+  <div id="graphOverrideModeLocal">
+    <div class="upload-grid" style="margin-top:4px;">
+      <div>
+        <label for="graph1File">Graph 1 File (IDI override)</label>
+        <input type="file" id="graph1File" accept=".txt,.csv,.gz" />
+      </div>
+      <div>
+        <label for="graph2File">Graph 2 File (DDR override)</label>
+        <input type="file" id="graph2File" accept=".txt,.csv,.gz" />
+      </div>
     </div>
-    <div>
-      <label for="graph2File">Graph 2 File (DDR override)</label>
-      <input type="file" id="graph2File" accept=".txt,.csv,.gz" />
+    <div class="btn-row" style="margin-top:12px;">
+      <button class="btn-primary" onclick="applyGraphFiles()">Apply Graph Overrides</button>
     </div>
   </div>
 
-  <div class="btn-row">
-    <button class="btn-primary" onclick="applyGraphFiles()">Apply Graph Overrides</button>
+  <!-- ── SSH Remote mode ─────────────────────────────────────────────── -->
+  <div id="graphOverrideModeSSH" style="display:none;">
+    <p class="subtle" style="margin-bottom:12px; padding:10px 14px; background:#eff6ff; border-radius:10px; font-size:0.87rem; color:#1d4ed8;">
+      Uses the same SSH connection as the Load Data panel. Browse to pick a specific file from the run directory.
+    </p>
+
+    <!-- Graph 1 (IDI) -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">
+        Graph 1 — IDI BW file
+        <span id="graph1SshStatus" style="display:none; font-size:0.78rem; font-weight:600; margin-left:8px; padding:2px 8px; border-radius:999px;"></span>
+      </label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input id="graph1SshPath" type="text" placeholder="/path/to/idi_bw_samples.txt"
+               style="flex:1; padding:8px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.9rem; font-family:monospace;" />
+        <button type="button" class="btn-secondary" style="white-space:nowrap; padding:7px 12px; font-size:0.82rem;"
+                onclick="sshOpenDirBrowser('graph1SshPath','graph1DirBrowser', function(p){ _loadGraphFileSSH(1,p); })">&#128193;&nbsp; Browse&hellip;</button>
+      </div>
+      <div id="graph1DirBrowser" style="display:none; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-top:8px; background:#f8fafc;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshDirUp('graph1SshPath','graph1DirBrowser')">&#8679; Up</button>
+            <code id="graph1DirBrowserPath" style="font-size:0.82rem; color:#1d4ed8; background:#eff6ff; padding:4px 8px; border-radius:6px;">~</code>
+          </div>
+          <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshCloseDirBrowser('graph1DirBrowser')">&#10005; Close</button>
+        </div>
+        <div id="graph1DirBrowserList" style="max-height:200px; overflow-y:auto; font-size:0.85rem;"></div>
+      </div>
+    </div>
+
+    <!-- Graph 2 (DDR) -->
+    <div style="margin-bottom:14px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">
+        Graph 2 — DDR BW file
+        <span id="graph2SshStatus" style="display:none; font-size:0.78rem; font-weight:600; margin-left:8px; padding:2px 8px; border-radius:999px;"></span>
+      </label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input id="graph2SshPath" type="text" placeholder="/path/to/ddr_bw_samples.txt"
+               style="flex:1; padding:8px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.9rem; font-family:monospace;" />
+        <button type="button" class="btn-secondary" style="white-space:nowrap; padding:7px 12px; font-size:0.82rem;"
+                onclick="sshOpenDirBrowser('graph2SshPath','graph2DirBrowser', function(p){ _loadGraphFileSSH(2,p); })">&#128193;&nbsp; Browse&hellip;</button>
+      </div>
+      <div id="graph2DirBrowser" style="display:none; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-top:8px; background:#f8fafc;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshDirUp('graph2SshPath','graph2DirBrowser')">&#8679; Up</button>
+            <code id="graph2DirBrowserPath" style="font-size:0.82rem; color:#1d4ed8; background:#eff6ff; padding:4px 8px; border-radius:6px;">~</code>
+          </div>
+          <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshCloseDirBrowser('graph2DirBrowser')">&#10005; Close</button>
+        </div>
+        <div id="graph2DirBrowserList" style="max-height:200px; overflow-y:auto; font-size:0.85rem;"></div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-primary" onclick="applyGraphFilesSSH()">&#8659;&nbsp; Load Graph Overrides from SSH</button>
+    </div>
   </div>
 </div>
+
+<script>
+function graphOverrideSelectMode(mode) {
+  document.getElementById("graphOverrideModeLocal").style.display = mode === "local" ? "" : "none";
+  document.getElementById("graphOverrideModeSSH").style.display  = mode === "ssh"   ? "" : "none";
+  document.querySelectorAll("#graphOverrideModeBtns .station-src-btn").forEach(function (btn) {
+    btn.classList.toggle("station-src-active", btn.dataset.mode === mode);
+  });
+  // Pre-fill paths from run dir when switching to SSH mode
+  if (mode === "ssh") {
+    var runDir = document.getElementById("sshRunDir")?.value.trim() || "";
+    if (runDir) {
+      if (!document.getElementById("graph1SshPath").value)
+        document.getElementById("graph1SshPath").value = runDir;
+      if (!document.getElementById("graph2SshPath").value)
+        document.getElementById("graph2SshPath").value = runDir;
+    }
+  }
+}
+</script>

@@ -1,0 +1,170 @@
+<!-- ── Stations Manager ──────────────────────────────────────────────────── -->
+<div class="panel" id="stationsPanel">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+    <div class="section-title" style="margin-bottom:0;">Stations</div>
+    <button class="btn-primary" onclick="stationOpenAddForm()">&#43;&nbsp; Add Station</button>
+  </div>
+
+  <!-- Add / Edit station form — hidden by default -->
+  <div id="stationFormWrap" style="display:none; background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px; margin-bottom:18px;">
+    <div style="font-size:1rem; font-weight:700; color:#111827; margin-bottom:14px;" id="stationFormTitle">Add Station</div>
+
+    <!-- Station Name -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Station Name</label>
+      <input id="stationName" type="text" placeholder="e.g. Lab Bench A, SIA-01…"
+             style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+    </div>
+
+    <!-- Data Source Selector -->
+    <div style="margin-bottom:14px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:6px;">Data Source</label>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;" id="stationSourceBtns">
+        <button class="station-src-btn station-src-active" data-src="local"  onclick="stationSelectSource('local')">&#128193;&nbsp; Local Folder</button>
+        <button class="station-src-btn"                    data-src="ssh"    onclick="stationSelectSource('ssh')">&#128279;&nbsp; SSH Remote</button>
+        <button class="station-src-btn"                    data-src="demo"   onclick="stationSelectSource('demo')">&#9654;&nbsp; Demo Data</button>
+      </div>
+    </div>
+
+    <!-- LOCAL FOLDER fields -->
+    <div id="stationSrcLocal" style="margin-bottom:12px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Run Directory Path <span style="font-weight:400; color:#9ca3af;">(label only — folder is picked at load time)</span></label>
+      <input id="stationLocalPath" type="text" placeholder="/path/to/run_dir  (optional label)"
+             style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+    </div>
+
+    <!-- SSH REMOTE fields -->
+    <div id="stationSrcSsh" style="display:none; margin-bottom:12px;">
+      <div style="display:grid; grid-template-columns:2fr 0.5fr 1fr; gap:10px; margin-bottom:10px;">
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Host</label>
+          <input id="stationSshHost" type="text" placeholder="10.x.x.x"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Port</label>
+          <input id="stationSshPort" type="number" value="22"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">User</label>
+          <input id="stationSshUser" type="text" placeholder="username"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem;" />
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Private Key Path</label>
+          <input id="stationSshKey" type="text" value="~/.ssh/id_ed25519"
+                 style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Remote Run Directory</label>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input id="stationSshRunDir" type="text" placeholder="/path/to/run_dir"
+                   style="flex:1; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+            <button id="stationBrowseBtn" type="button" class="btn-secondary" disabled
+                    style="white-space:nowrap; padding:7px 10px; font-size:0.82rem; opacity:0.45; cursor:not-allowed;"
+                    title="Test connection first"
+                    onclick="sshOpenDirBrowser('stationSshRunDir','stationDirBrowser')">&#128193;&nbsp; Browse&hellip;</button>
+          </div>
+          <p style="margin-top:4px; font-size:0.77rem; color:#9ca3af;">&#8593; Test connection first, then browse.</p>
+        </div>
+      </div>
+
+      <!-- Test connection row for station form -->
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+        <button type="button" class="btn-secondary" style="padding:7px 16px; font-size:0.85rem;"
+                onclick="stationTestConnection()">&#9654;&nbsp; Test Connection</button>
+        <span id="stationConnStatus" style="display:none; font-size:0.82rem; font-weight:700; padding:4px 12px; border-radius:999px;"></span>
+      </div>
+
+      <!-- Remote directory browser for station form -->
+      <div id="stationDirBrowser" style="display:none; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:10px; background:#f8fafc;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshDirUp('stationSshRunDir','stationDirBrowser')">&#8679; Up</button>
+            <code id="stationDirBrowserPath" style="font-size:0.82rem; color:#1d4ed8; background:#eff6ff; padding:4px 8px; border-radius:6px;">~</code>
+          </div>
+          <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshCloseDirBrowser('stationDirBrowser')">&#10005; Close</button>
+        </div>
+        <div id="stationDirBrowserList" style="max-height:200px; overflow-y:auto; font-size:0.85rem;"></div>
+      </div>
+      <div>
+        <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">
+          verification.py path <span style="font-weight:400; color:#9ca3af;">(relative to run dir or absolute)</span>
+        </label>
+        <input id="stationSshVpy" type="text" value="verification.py"
+               style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+      </div>
+    </div>
+
+    <!-- DEMO fields (no extra config needed) -->
+    <div id="stationSrcDemo" style="display:none; margin-bottom:12px;">
+      <p class="subtle" style="padding:10px 14px; background:#eff6ff; border-radius:10px; color:#1d4ed8; font-size:0.88rem;">
+        Uses the built-in demo dataset. No external connection required.
+      </p>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="btn-row" style="margin-top:4px;">
+      <button class="btn-primary"   onclick="stationSaveForm()">Save Station</button>
+      <button class="btn-secondary" onclick="stationCancelForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Station list -->
+  <div id="stationListWrap">
+    <div id="stationListEmpty" style="color:#9ca3af; font-size:0.9rem; font-style:italic; padding:10px 2px;">
+      No stations added yet. Click <strong>+ Add Station</strong> to get started.
+    </div>
+    <div id="stationList" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+</div>
+
+<style>
+  .station-src-btn {
+    padding: 8px 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 999px;
+    background: white;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .station-src-btn:hover { border-color: #2563eb; color: #2563eb; }
+  .station-src-btn.station-src-active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+  }
+
+  .station-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+    background: white;
+    flex-wrap: wrap;
+  }
+  .station-card-info { display: flex; flex-direction: column; gap: 3px; flex: 1 1 200px; }
+  .station-card-name { font-weight: 700; font-size: 0.97rem; color: #111827; }
+  .station-card-meta { font-size: 0.82rem; color: #6b7280; }
+  .station-card-status {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .station-status-idle    { background:#f1f5f9; color:#64748b; }
+  .station-status-loading { background:#eff6ff; color:#2563eb; }
+  .station-status-ok      { background:#f0fdf4; color:#16a34a; }
+  .station-status-error   { background:#fef2f2; color:#b91c1c; }
+  .station-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+</style>

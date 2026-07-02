@@ -3,79 +3,459 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Setup and Trigger Run</title>
+  <title>Setup Environment and Trigger Run</title>
   <link rel="stylesheet" href="styles/dashboard.css" />
+  <script src="scripts/connection.js" defer></script>
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      color: white;
+      padding: 28px;
+      border-radius: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .page-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .page-hero p {
+      color: #dbeafe;
+      line-height: 1.6;
+    }
+
+    .setup-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .inline-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 6px;
+    }
+
+    .inline-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    .step-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    .cmd-box {
+      background: #0f172a;
+      color: #e5f0ff;
+      border-radius: 14px;
+      padding: 14px;
+      font-family: "Courier New", Courier, monospace;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      min-height: 90px;
+      border: 1px solid #1e293b;
+    }
+
+    .cmd-box[contenteditable="true"]:focus,
+    .editable-box:focus {
+      outline: 2px solid #93c5fd;
+      outline-offset: 2px;
+    }
+
+    .editable-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      background: #fafafa;
+      min-height: 100px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: 700;
+      background: #2563eb;
+      color: white;
+    }
+
+    .mini-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .mini-btn.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .mini-btn.secondary:hover {
+      background: #d1d5db;
+    }
+
+    .mini-btn.ghost {
+      background: #0f172a;
+      color: white;
+    }
+
+    .mini-btn.ghost:hover {
+      background: #1e293b;
+    }
+
+    .summary-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .summary-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .summary-item-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #6b7280;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .summary-item-value {
+      color: #111827;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .exec-status {
+      margin-top: 12px;
+      font-size: 0.92rem;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .exec-status span {
+      color: #1d4ed8;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1100px) {
+      .setup-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
+    <div class="page-hero">
       <h1>Setup Environment and Trigger Run</h1>
-      <p>Prepare the environment, validate input collateral, and trigger the verification flow.</p>
+      <p>
+        Review active VNC sessions, prepare environment commands,
+        and simulate or later automate execution for setup and verification triggering.
+      </p>
     </div>
 
     <div class="panel">
       <div class="btn-row">
         <a class="nav-link" href="index.html">Home</a>
-        <a class="nav-link" href="analysis.html">Verification Analysis</a>
-        <a class="nav-link" href="dashboard.html">Work Dashboard</a>
+        <a class="nav-link" href="analysis.html">Analysis</a>
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
       </div>
+      <div id="connBadge"></div>
     </div>
 
-    <div class="panel">
-      <div class="section-title">Environment Setup Checklist</div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Step</th>
-              <th>Description</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>Select / validate run directory</td><td>Pending</td></tr>
-            <tr><td>2</td><td>Confirm LIP tracker files are present</td><td>Pending</td></tr>
-            <tr><td>3</td><td>Confirm .lst file is present</td><td>Pending</td></tr>
-            <tr><td>4</td><td>Confirm platform CSV is present</td><td>Pending</td></tr>
-            <tr><td>5</td><td>Confirm scenario JSON is present</td><td>Pending</td></tr>
-            <tr><td>6</td><td>Determine workload / model type</td><td>Pending</td></tr>
-            <tr><td>7</td><td>Trigger verification run</td><td>Pending</td></tr>
-          </tbody>
-        </table>
+    <div class="setup-grid">
+      <div>
+        <!-- Run Directory: SSH browser + path selector (first) -->
+        <div class="step-card">
+          <div class="step-header">
+            <div>
+              <div class="step-badge" style="background:#d1fae5;color:#065f46;">Run Dir</div>
+              <div class="section-title">Select Run Directory</div>
+              <div class="subtle">Browse the remote host and select the verification run directory.</div>
+            </div>
+            <span class="status-pill">SSH Browser</span>
+          </div>
+
+          <!-- Selected path display -->
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+            <input id="runDirInput" type="text" placeholder="/nfs/site/disks/..."
+              style="flex:1;padding:9px 12px;border:1px solid #334155;border-radius:8px;font-size:0.88rem;font-family:monospace;background:#0f172a;color:#e5f0ff;" />
+            <button class="mini-btn" style="background:#059669;white-space:nowrap;" onclick="loadRunDirInAnalysis()">&#128196; Use in Analysis</button>
+          </div>
+
+          <!-- Browser navigation bar -->
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
+            <input id="browserPath" type="text" value="/nfs/site/disks"
+              placeholder="/nfs/site/disks"
+              style="flex:1;padding:7px 10px;border:1px solid #334155;border-radius:6px;font-size:0.82rem;font-family:monospace;background:#1e293b;color:#e2e8f0;" />
+            <button class="mini-btn secondary" onclick="browseDir(document.getElementById('browserPath').value)">Go</button>
+            <button class="mini-btn secondary" onclick="browserUp()">&#8593; Up</button>
+          </div>
+
+          <!-- Directory listing -->
+          <div id="dirBrowserBox" style="background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:10px;min-height:140px;max-height:280px;overflow-y:auto;">
+            <div style="color:#6b7280;font-size:0.82rem;">Click "Go" to browse the remote host filesystem.</div>
+          </div>
+          <div style="font-size:0.75rem;color:#6b7280;margin-top:4px;">Click a folder to navigate in; click &#10003; to select it as the run directory.</div>
+          <div id="browserStatus" style="font-size:0.8rem;color:#6b7280;margin-top:6px;"></div>
+        </div>
+
+        <!-- Step 1: Cheetah environment -->
+        <div class="step-card">
+          <div class="step-header">
+            <div>
+              <div class="step-badge">Step 1</div>
+              <div class="section-title">Set up the Cheetah environment</div>
+              <div class="subtle">Initialize the environment before loading project groups.</div>
+            </div>
+            <span class="status-pill">Editable Command</span>
+          </div>
+
+          <label for="cmdStep1">Command</label>
+          <div id="cmdStep1" class="cmd-box" contenteditable="true">source /p/hdk/rtl/hdk.rc -cfg xhdk74 -model_shell -org cdg -m fc_emu -s wcl-j0 -b main -w /nfs/site/proj/wcl/wcl.emulation.models.01/fc_emu/fc_emu-wcl-j0-main-26ww23a/
+echo "Environment loaded OK"
+printenv | grep -E 'MODEL_ROOT|HDK_DOMAIN|PROJECT|STEPPING|CLUSTER' | head -10</div>
+
+          <div class="action-row">
+            <button class="mini-btn" onclick="copyCommand('cmdStep1')">Copy Command</button>
+            <button class="mini-btn secondary" onclick="resetCommand('cmdStep1', '/p/cth/bin/cth_psetup -p ddgcth/1.13 -cfg rzlcn2x -read_only')">Reset</button>
+            <button class="mini-btn ghost" onclick="executeStep('Step 1', 'cmdStep1', 'step1Status')">Execute</button>
+          </div>
+
+          <div class="exec-status">Execution Status: <span id="step1Status">Not started</span></div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div>
+              <div class="step-badge">Step 2</div>
+              <div class="section-title">Wash out the required groups</div>
+              <div class="subtle">Load the required project groups.</div>
+            </div>
+            <span class="status-pill">Editable Command</span>
+          </div>
+
+          <label for="cmdStep2">Command</label>
+          <div id="cmdStep2" class="cmd-box" contenteditable="true">wash -n soc rzlcn2x sklall skl_rtl intelall hdk10nm hdk7nm mpgall hdk22nm phdk73rtl</div>
+
+          <div class="action-row">
+            <button class="mini-btn" onclick="executeStep('Step 2', 'cmdStep2', 'step2Status')">&#9654; Execute</button>
+            <button class="mini-btn secondary" onclick="copyCommand('cmdStep2')">Copy</button>
+            <button class="mini-btn secondary" onclick="resetCommand('cmdStep2', 'wash -n soc rzlcn2x sklall skl_rtl intelall hdk10nm hdk7nm mpgall hdk22nm phdk73rtl')">Reset</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
+            <span class="subtle">Output</span>
+            <span id="step2Status" style="font-size:0.8rem;color:#6b7280;">Not started</span>
+          </div>
+          <div id="cmdStep2_output" class="cmd-box" style="min-height:60px;max-height:220px;overflow-y:auto;white-space:pre-wrap;color:#86efac;font-size:0.82rem;">Click Execute to run via SSH (tcsh)...</div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-header">
+            <div>
+              <div class="step-badge">Step 3</div>
+              <div class="section-title">Clone / configure the model</div>
+              <div class="subtle">Set model environment variables and workarea path.</div>
+            </div>
+            <span class="status-pill">Editable Commands</span>
+          </div>
+
+          <label for="cmdStep3">Commands</label>
+          <div id="cmdStep3" class="cmd-box" contenteditable="true">setenv NB_WASH_ENABLED 1;
+
+setenv NB_WASH_GROUPS soc,rzlcn2x,sklall,skl_rtl,intelall,hdk10nm,hdk7nm,mpgall,hdk22nm,phdk73rtl
+
+setenv WORKAREA /p/cth/rtl/models/ddgcth/rzl/pkg_emu/pkg-rzlpkg-a0-rzlpkgn2-cdie_ww16e_hub_ww17a</div>
+
+          <div class="action-row">
+            <button class="mini-btn" onclick="executeStep('Step 3', 'cmdStep3', 'step3Status')">&#9654; Execute</button>
+            <button class="mini-btn secondary" onclick="copyCommand('cmdStep3')">Copy</button>
+            <button class="mini-btn secondary" onclick="resetCommand('cmdStep3', 'setenv NB_WASH_ENABLED 1;\n\nsetenv NB_WASH_GROUPS soc,rzlcn2x,sklall,skl_rtl,intelall,hdk10nm,hdk7nm,mpgall,hdk22nm,phdk73rtl\n\nsetenv WORKAREA /p/cth/rtl/models/ddgcth/rzl/pkg_emu/pkg-rzlpkg-a0-rzlpkgn2-cdie_ww16e_hub_ww17a')">Reset</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
+            <span class="subtle">Output</span>
+            <span id="step3Status" style="font-size:0.8rem;color:#6b7280;">Not started</span>
+          </div>
+          <div id="cmdStep3_output" class="cmd-box" style="min-height:60px;max-height:220px;overflow-y:auto;white-space:pre-wrap;color:#86efac;font-size:0.82rem;">Click Execute to run via SSH (tcsh)...</div>
+        </div>
+
+        <div class="step-card">
+          <div class="section-title">Trigger Run</div>
+          <div class="subtle">Update the final verification command before execution.</div>
+
+          <label for="triggerCmd">Run Command</label>
+          <div id="triggerCmd" class="cmd-box" contenteditable="true">source /p/hdk/rtl/hdk.rc -cfg xhdk74 -model_shell -org cdg -m fc_emu -s wcl-j0 -b main -w /nfs/site/proj/wcl/wcl.emulation.models.01/fc_emu/fc_emu-wcl-j0-main-26ww23a/
+cd /nfs/site/disks/ive_sle_sc8_pnp_05/saritha/Sgunugan/WCL_004/
+simregress -dut soc -l level0_c004ur_ave_model_compute0_zse5.list -trex -ms -execlimit 10000 -ms- -trex- -save EMUL_QSLOT=cdg_std_lnl -no_xs -net -P sc8_normal -C "SLES12&&128G" -Q "/IVE/PHNX/SEM/LNL"</div>
+
+          <div class="action-row">
+            <button class="mini-btn" style="background:#7c3aed;" onclick="executeStep('Trigger Run', 'triggerCmd', 'triggerStatus')">&#9654; Execute Trigger</button>
+            <button class="mini-btn secondary" onclick="copyCommand('triggerCmd')">Copy</button>
+            <button class="mini-btn secondary" onclick="resetCommand('triggerCmd', 'source /p/hdk/rtl/hdk.rc -cfg xhdk74 -model_shell -org cdg -m fc_emu -s wcl-j0 -b main -w /nfs/site/proj/wcl/wcl.emulation.models.01/fc_emu/fc_emu-wcl-j0-main-26ww23a/\ncd /nfs/site/disks/ive_sle_sc8_pnp_05/saritha/Sgunugan/WCL_004/\nsimregress -dut soc -l level0_c004ur_ave_model_compute0_zse5.list -trex -ms -execlimit 10000 -ms- -trex- -save EMUL_QSLOT=cdg_std_lnl -no_xs -net -P sc8_normal -C \"SLES12&&128G\" -Q \"/IVE/PHNX/SEM/LNL\"')">Reset</button>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
+            <span class="subtle">Output</span>
+            <span id="triggerStatus" style="font-size:0.8rem;color:#6b7280;">Not started</span>
+          </div>
+          <div id="triggerCmd_output" class="cmd-box" style="min-height:60px;max-height:280px;overflow-y:auto;white-space:pre-wrap;color:#86efac;font-size:0.82rem;">Click Execute Trigger to run via SSH (tcsh)...</div>
+        </div>
+
+        <div class="step-card">
+          <div class="section-title">Combined Execution Script</div>
+          <div class="subtle">Generate one combined block with all setup commands.</div>
+
+          <div id="combinedScript" class="cmd-box">Click "Generate Combined Script" to prepare the full execution block.</div>
+
+          <div class="action-row">
+            <button class="mini-btn" onclick="generateCombinedScript()">Generate Combined Script</button>
+            <button class="mini-btn secondary" onclick="copyCommand('combinedScript')">Copy Combined Script</button>
+            <button class="mini-btn ghost" onclick="executeAllSteps()">Execute All Steps</button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="panel">
-      <div class="section-title">Run Command</div>
-      <div class="subtle">Example command based on the provided automation script:</div>
-      <div class="kv-block">python3.11.1 verification.py -r /path/to/run_dir</div>
-    </div>
+      <div>
+        <div class="table-card">
+          <div class="section-title">Run Directory</div>
+          <div class="subtle">Selected path for analysis and verification.</div>
+          <div class="summary-list" id="sessionSummaryList">
+            <div class="summary-item">
+              <div class="summary-item-title">Status</div>
+              <div class="summary-item-value">Browse and select a run directory in the Run Dir card.</div>
+            </div>
+          </div>
+        </div>
 
-    <div class="panel">
-      <div class="section-title">Input Requirements</div>
-      <div class="kv-block">
-Expected inputs:
-- Run directory
-- lip_tracker*.log*
-- stream*.lst / do*.lst / related lst
-- Platform*.csv
-- perspec_scenario_*.json
+        <div class="table-card" style="margin-top:20px;">
+          <div class="section-title">Setup Checklist</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Run directory selected</td><td>Pending</td></tr>
+                <tr><td>Step 1 — Cheetah env (source hdk.rc)</td><td>Pending</td></tr>
+                <tr><td>Step 2 — Wash groups</td><td>Pending</td></tr>
+                <tr><td>Step 3 — Model config (setenv)</td><td>Pending</td></tr>
+                <tr><td>Trigger command reviewed</td><td>Pending</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-The automation script validates these before proceeding.
-      </div>
-    </div>
+        <div class="table-card" style="margin-top:20px;">
+          <div class="section-title">Execution Notes</div>
+          <div class="subtle">Keep machine notes, constraints, or reminders here.</div>
+          <div class="editable-box" contenteditable="true">Example notes:
+- Validate WORKAREA path before execution
+- Confirm run directory contains tracker files
+- Backend integration can replace simulation mode later</div>
+        </div>
 
-    <div class="panel">
-      <div class="section-title">Setup Notes</div>
-      <div class="kv-block" contenteditable="true">
-Add setup instructions here:
-- environment variables
-- package/module requirements
-- command alias
-- decompression behavior
-- output location
+        <div class="table-card" style="margin-top:20px;">
+          <div class="section-title">Action Log</div>
+          <div class="subtle">Tracks copy, summary, and execution simulation events.</div>
+          <div class="kv-block" id="setupActionLog">No actions yet.</div>
+        </div>
       </div>
     </div>
   </div>
+
+  <script src="scripts/setup.js"></script>
 </body>
 </html>

@@ -1,15 +1,233 @@
+<!-- ── Load Data (merged local + SSH + demo) ─────────────────────────────── -->
 <div class="panel">
-  <div class="section-title">Primary Input</div>
-  <label for="runFolder">Run Directory or Results Directory</label>
-  <input type="file" id="runFolder" webkitdirectory directory multiple />
+  <div class="section-title">Load Data</div>
 
-  <div class="btn-row">
-    <button id="loadDirBtn" class="btn-primary" onclick="loadSelectedDirectory()">Load Directory</button>
-    <button class="btn-primary" onclick="loadDemoData()">Load Demo</button>
-    <button class="btn-secondary" onclick="clearDashboard()">Clear</button>
+  <!-- Source type selector -->
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;" id="loadModeBtns">
+    <button class="station-src-btn station-src-active" data-mode="ssh"   onclick="loadSelectMode('ssh')">&#128279;&nbsp; SSH Remote</button>
+    <button class="station-src-btn"                    data-mode="local" onclick="loadSelectMode('local')">&#128193;&nbsp; Local Folder</button>
+    <button class="station-src-btn"                    data-mode="demo"  onclick="loadSelectMode('demo')">&#9654;&nbsp; Demo Data</button>
+  </div>
+
+  <!-- ── SSH Remote ─────────────────────────────────────────────────────── -->
+  <div id="loadModeSsh">
+
+    <!-- Connection fields -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px;">
+      <div style="font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:10px; letter-spacing:0.03em;">Connection</div>
+
+      <div style="display:grid; grid-template-columns:2fr 0.45fr 1fr; gap:10px; margin-bottom:10px;">
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:3px;">Host</label>
+          <input id="loadSshHost" type="text" placeholder="10.x.x.x"
+                 style="width:100%; padding:8px 11px; border:1px solid #cbd5e1; border-radius:9px; font-size:0.92rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:3px;">Port</label>
+          <input id="loadSshPort" type="number" value="22"
+                 style="width:100%; padding:8px 11px; border:1px solid #cbd5e1; border-radius:9px; font-size:0.92rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:3px;">User</label>
+          <input id="loadSshUser" type="text" placeholder="username"
+                 style="width:100%; padding:8px 11px; border:1px solid #cbd5e1; border-radius:9px; font-size:0.92rem;" />
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:3px;">
+            Password <span style="font-weight:400; color:#9ca3af;">(session only, not saved)</span>
+          </label>
+          <input id="loadSshPassword" type="password" placeholder="SSH password (optional)"
+                 style="width:100%; padding:8px 11px; border:1px solid #cbd5e1; border-radius:9px; font-size:0.92rem;" />
+        </div>
+        <div>
+          <label style="display:block; font-size:0.78rem; font-weight:700; color:#374151; margin-bottom:3px;">
+            Private Key Path <span style="font-weight:400; color:#9ca3af;">(if not using password)</span>
+          </label>
+          <input id="loadSshKey" type="text" value="~/.ssh/id_ed25519"
+                 style="width:100%; padding:8px 11px; border:1px solid #cbd5e1; border-radius:9px; font-size:0.92rem; font-family:monospace;" />
+        </div>
+      </div>
+
+      <!-- Test Connection row -->
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <button class="btn-secondary" style="padding:8px 18px;" onclick="sshTestConnection()">
+          &#9654;&nbsp; Test Connection
+        </button>
+        <div id="sshConnStatus" style="display:none; padding:6px 14px; border-radius:999px; font-size:0.83rem; font-weight:700; border:1px solid #e5e7eb;"></div>
+      </div>
+    </div>
+
+    <!-- Run directory -->
+    <div style="margin-bottom:12px;">
+      <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Remote Run Directory</label>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input id="sshRunDir" type="text" placeholder="/path/to/run_dir"
+               style="flex:1; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;"
+               onkeydown="if(event.key==='Enter'){sshLoadFiles();event.preventDefault();}" />
+        <button id="sshBrowseBtn" type="button" class="btn-secondary" disabled
+                style="white-space:nowrap; padding:8px 12px; font-size:0.83rem; opacity:0.45; cursor:not-allowed;"
+                title="Test connection first"
+                onclick="sshOpenDirBrowser('sshRunDir','sshDirBrowser')">&#128193;&nbsp; Browse&hellip;</button>
+      </div>
+      <p style="margin-top:4px; font-size:0.77rem; color:#9ca3af;">Test connection above first, then Browse to navigate the remote filesystem.</p>
+    </div>
+
+    <!-- Inline directory browser -->
+    <div id="sshDirBrowser" style="display:none; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:12px; background:#f8fafc;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshDirUp('sshRunDir','sshDirBrowser')">&#8679; Up</button>
+          <code id="sshDirBrowserPath" style="font-size:0.82rem; color:#1d4ed8; background:#eff6ff; padding:4px 8px; border-radius:6px;">~</code>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" style="padding:5px 12px; font-size:0.8rem; font-weight:700; background:#2563eb; color:#fff; border:none; border-radius:8px; cursor:pointer;"
+                  onclick="(function(){
+                    var p=document.getElementById('sshDirBrowserPath').textContent.trim();
+                    document.getElementById('sshRunDir').value=p;
+                    sshCloseDirBrowser('sshDirBrowser');
+                    sshLoadFiles();
+                  })();">&#9654;&nbsp;Select &amp; Run</button>
+          <button type="button" class="btn-secondary" style="padding:5px 10px; font-size:0.8rem;" onclick="sshCloseDirBrowser('sshDirBrowser')">&#10005; Close</button>
+        </div>
+      </div>
+      <div id="sshDirBrowserList" style="max-height:220px; overflow-y:auto; font-size:0.85rem;"></div>
+    </div>
+
+    </div>
+
+    <!-- Primary actions -->
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; align-items:center;">
+      <button class="btn-primary" style="background:#2563eb;" onclick="sshLoadFiles()">
+        &#128194;&nbsp; Load
+      </button>
+      <button class="btn-primary" style="background:#059669;" onclick="sshRunAndLoad()">
+        &#9654;&nbsp; Run Verification Script
+      </button>
+      <button class="btn-secondary" onclick="clearDashboard()">Clear</button>
+    </div>
+    <p style="margin:0 0 10px; font-size:0.77rem; color:#6b7280;">
+      <strong>Load</strong> — fetch &amp; display existing run data &nbsp;|&nbsp;
+      <strong>Run Verification Script</strong> — execute verification.py on the remote host and stream console output below
+    </p>
+
+    <!-- Console log — shown when verification.py is running -->
+    <div id="sshRunLogWrap" style="display:none; margin-bottom:12px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+        <div style="font-size:0.82rem; font-weight:700; color:#374151;">&#128196;&nbsp; Verification Console Output</div>
+        <button type="button" onclick="sshClearRunLog()" style="font-size:0.75rem; padding:3px 10px; border:1px solid #e2e8f0; border-radius:6px; background:#f8fafc; color:#6b7280; cursor:pointer;">Clear</button>
+      </div>
+      <pre id="sshRunLog" style="background:#0f172a; color:#e5f0ff; border-radius:12px; padding:14px; font-size:0.82rem; max-height:340px; overflow-y:auto; white-space:pre-wrap; line-height:1.5;">—</pre>
+    </div>
+
+    <!-- Advanced config (open so user can see/edit the script path) -->
+    <details open style="margin-bottom:12px;">
+      <summary style="cursor:pointer; font-size:0.82rem; color:#6b7280; user-select:none; padding:4px 0;">&#9654; Advanced — verification.py settings</summary>
+      <div style="padding-top:12px;">
+        <div style="display:grid; grid-template-columns:2fr 1fr; gap:10px; margin-bottom:12px;">
+          <div>
+            <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">
+              verification.py path <span style="font-weight:400; color:#9ca3af;">(relative to run dir, or absolute)</span>
+            </label>
+            <input id="sshVpyPath" type="text" value="/nfs/site/disks/ive_sle_sc8_pnp_02/jbponsci/scripts/NVL_AX/test/WIPWCL_verification_hubOnly.py"
+                   style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+          </div>
+          <div>
+            <label style="display:block; font-size:0.82rem; font-weight:700; color:#374151; margin-bottom:4px;">Python interpreter <span style="font-weight:400; color:#9ca3af;">(leave blank to auto-detect)</span></label>
+            <input id="sshPythonBin" type="text" value=""
+                   placeholder="auto-detect (python3.11.1)"
+                   style="width:100%; padding:9px 11px; border:1px solid #cbd5e1; border-radius:10px; font-size:0.93rem; font-family:monospace;" />
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <p class="subtle" style="margin-top:8px;">
+      Bridge server must be running:&nbsp;
+      <code style="background:#f1f5f9; padding:2px 6px; border-radius:6px; font-size:0.82rem;">python tools/server.py</code>
+    </p>
+  </div><!-- /loadModeSsh -->
+
+  <!-- ── Local Folder ───────────────────────────────────────────────────── -->
+  <div id="loadModeLocal" style="display:none;">
+    <div id="fsaPickerRow" style="margin-bottom:12px;">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="pickDirectory()">Browse Folder&hellip;</button>
+        <span id="dirPickerLabel" style="color:#6b7280; font-size:0.9rem; font-style:italic;">No folder selected</span>
+      </div>
+      <p class="subtle" style="margin-top:6px;">Only the 3 required files are fetched &mdash; no full directory scan.</p>
+    </div>
+    <div id="legacyInputRow" style="display:none;">
+      <label for="runFolder">Run Directory or Results Directory</label>
+      <input type="file" id="runFolder" webkitdirectory directory multiple />
+    </div>
+    <div class="btn-row">
+      <button id="loadDirBtn" class="btn-primary" onclick="loadSelectedDirectory()">Load Directory</button>
+      <button class="btn-secondary" onclick="clearDashboard()">Clear</button>
+    </div>
+  </div><!-- /loadModeLocal -->
+
+  <!-- ── Demo Data ──────────────────────────────────────────────────────── -->
+  <div id="loadModeDemo" style="display:none;">
+    <p class="subtle" style="padding:12px 16px; background:#eff6ff; border-radius:10px; color:#1d4ed8; font-size:0.88rem; margin-bottom:14px;">
+      Loads the built-in sample dataset so you can explore the dashboard without a remote connection.
+    </p>
+    <div class="btn-row">
+      <button class="btn-primary" onclick="loadDemoData()">&#9654;&nbsp; Load Demo Data</button>
+      <button class="btn-secondary" onclick="clearDashboard()">Clear</button>
+    </div>
+  </div><!-- /loadModeDemo -->
+
+  <!-- Progress indicator (shared across all modes) -->
+  <div id="loadProgressWrap" style="display:none; margin-top:14px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+      <span id="loadProgressLabel" style="font-size:0.85rem; color:#1d4ed8; font-weight:600;"></span>
+      <span id="loadProgressPct"   style="font-size:0.82rem; color:#6b7280;"></span>
+    </div>
+    <div style="background:#e5e7eb; border-radius:999px; height:8px; overflow:hidden;">
+      <div id="loadProgressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#2563eb,#60a5fa); border-radius:999px; transition:width 0.3s ease;"></div>
+    </div>
+    <div id="loadProgressSteps" style="margin-top:8px; font-size:0.8rem; color:#6b7280; line-height:1.6;"></div>
   </div>
 </div>
 
 <div id="statusBox" class="status-box">
-  Select either the original run directory or a generated results directory. The dashboard will auto-detect available files.
+  Choose a data source above, then load your run directory.
 </div>
+
+<script>
+(function () {
+  // Show FSA picker or legacy input depending on browser support
+  if (typeof window.showDirectoryPicker === "function") {
+    document.getElementById("fsaPickerRow").style.display = "";
+    document.getElementById("legacyInputRow").style.display = "none";
+  } else {
+    document.getElementById("fsaPickerRow").style.display = "none";
+    document.getElementById("legacyInputRow").style.display = "";
+  }
+
+  // Pre-fill SSH fields from localStorage / sessionStorage
+  const c = (typeof connLoad === "function") ? connLoad() : null;
+  if (c) {
+    if (c.host)     document.getElementById("loadSshHost").value = c.host;
+    if (c.port)     document.getElementById("loadSshPort").value = c.port;
+    if (c.user)     document.getElementById("loadSshUser").value = c.user;
+    if (c.key_path) document.getElementById("loadSshKey").value  = c.key_path;
+  }
+  const savedPass = sessionStorage.getItem("ptp_ssh_pass") || "";
+  if (savedPass) document.getElementById("loadSshPassword").value = savedPass;
+})();
+
+function loadSelectMode(mode) {
+  ["ssh", "local", "demo"].forEach(function (m) {
+    var el = document.getElementById("loadMode" + m.charAt(0).toUpperCase() + m.slice(1));
+    if (el) el.style.display = (m === mode) ? "" : "none";
+  });
+  document.querySelectorAll("#loadModeBtns .station-src-btn").forEach(function (btn) {
+    btn.classList.toggle("station-src-active", btn.dataset.mode === mode);
+  });
+}
+</script>
+

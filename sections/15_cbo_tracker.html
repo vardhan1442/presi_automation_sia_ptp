@@ -1,0 +1,20 @@
+<!-- CBO Tracker Traffic Stats -->
+<!-- GetCbo_tracker from pons_verification.py — per-tracker opcode counts -->
+
+<div class="panel">
+  <div class="section-title">CBO Tracker Opcode Distribution
+    <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+      Per-tracker opcode counts from cbo_*_N.log* (count &gt; 100 shown)
+    </span>
+  </div>
+
+  <!-- Aggregate chart across all CBO trackers -->
+  <div id="cboAggChart" style="width:100%;height:260px;margin-bottom:16px;"></div>
+
+  <!-- Per-tracker breakdown -->
+  <div id="cboTrackersWrap">
+    <div id="cboNoDataMsg" style="color:#6b7280;font-size:0.88rem;padding:10px 0;">
+      No CBO tracker data found. Run pons_verification.py to generate CBO tracker stats.
+    </div>
+  </div>
+</div>

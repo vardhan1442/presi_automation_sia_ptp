@@ -1,11 +1,82 @@
 <div class="panel">
   <div class="section-title">IDI Loops Information</div>
+
+  <!-- Summary Statistics -->
   <div class="stats-grid">
     <div class="card"><div class="stat-title">Total Loops</div><div class="stat-value" id="loopInfoCount"></div></div>
     <div class="card"><div class="stat-title">First Loop Start</div><div class="stat-value" id="loopInfoFirstStart"></div></div>
     <div class="card"><div class="stat-title">Last Loop End</div><div class="stat-value" id="loopInfoLastEnd"></div></div>
+    <div class="card"><div class="stat-title">Total Span</div><div class="stat-value" id="loopInfoTotalSpan"></div></div>
     <div class="card"><div class="stat-title">Avg Loop Duration</div><div class="stat-value" id="loopInfoAvgDuration"></div></div>
     <div class="card"><div class="stat-title">Max Loop Duration</div><div class="stat-value" id="loopInfoMaxDuration"></div></div>
     <div class="card"><div class="stat-title">Min Loop Duration</div><div class="stat-value" id="loopInfoMinDuration"></div></div>
+    <div class="card"><div class="stat-title">Duration StdDev</div><div class="stat-value" id="loopInfoDurStdDev"></div></div>
+    <div class="card"><div class="stat-title">Duration CV <span style="font-size:0.72rem;font-weight:400;color:#9ca3af;">(lower = more consistent)</span></div><div class="stat-value" id="loopInfoDurCV"></div></div>
+    <div class="card"><div class="stat-title">Loop Size (Lsz / r10)</div><div class="stat-value" id="loopInfoLsz"></div></div>
+    <div class="card"><div class="stat-title">Loop Count (r13)</div><div class="stat-value" id="loopInfoLoopsReg"></div></div>
+    <div class="card"><div class="stat-title">LIP Inst Count</div><div class="stat-value" id="loopInfoLipInst"></div></div>
   </div>
+
+  <!-- Instruction Details -->
+  <div class="section-title" style="margin-top:4px; margin-bottom:12px;">Instruction Details</div>
+  <div class="three-col" style="margin-bottom:16px;">
+    <div class="card"><div class="stat-title">Total Instructions</div><div class="stat-value" id="loopInstTotal"></div></div>
+    <div class="card"><div class="stat-title">Aligned (64B Boundary)</div><div class="stat-value" id="loopInstAligned"></div></div>
+    <div class="card"><div class="stat-title">Unaligned</div><div class="stat-value" id="loopInstUnaligned"></div></div>
+  </div>
+
+  <!-- Loop Timeline Chart -->
+  <div class="section-title" style="margin-bottom:6px;">IDI Loop Timeline
+    <span style="font-size:0.78rem; font-weight:400; color:#6b7280; margin-left:8px;">Each horizontal bar is a loop duration from start to end</span>
+  </div>
+  <div id="loopChart" style="width:100%; height:200px; margin-bottom:24px;"></div>
+
+  <!-- IDI BW per Loop Chart -->
+  <div class="section-title" style="margin-bottom:4px;">IDI Bandwidth per Loop
+    <span style="font-size:0.78rem; font-weight:400; color:#6b7280; margin-left:8px;">Avg &amp; Max Read/Write BW for each loop window</span>
+  </div>
+  <div id="loopBwChart" style="width:100%; height:260px; margin-bottom:24px;"></div>
+
+  <!-- Per-Loop Metrics Table -->
+  <div class="section-title" style="margin-bottom:8px;">Per-Loop BW Metrics
+    <span style="font-size:0.78rem; font-weight:400; color:#6b7280; margin-left:8px;">Click a row to zoom IDI &amp; DDR charts to that loop</span>
+  </div>
+  <div class="table-wrap" style="margin-bottom:24px; overflow-x:auto;">
+    <table id="loopMetricsTable">
+      <thead>
+        <tr>
+          <th rowspan="2" style="vertical-align:middle;">Loop #</th>
+          <th rowspan="2" style="vertical-align:middle;">Duration</th>
+          <th colspan="3" style="text-align:center; color:#2563eb; border-bottom:1px solid #334155;">IDI Read BW</th>
+          <th colspan="3" style="text-align:center; color:#f59e0b; border-bottom:1px solid #334155;">IDI Write BW</th>
+          <th colspan="3" style="text-align:center; color:#10b981; border-bottom:1px solid #334155;">DDR Read BW</th>
+          <th colspan="3" style="text-align:center; color:#a855f7; border-bottom:1px solid #334155;">DDR Write BW</th>
+        </tr>
+        <tr>
+          <th style="color:#2563eb;">Avg</th><th style="color:#2563eb;">Min</th><th style="color:#2563eb;">Max</th>
+          <th style="color:#f59e0b;">Avg</th><th style="color:#f59e0b;">Min</th><th style="color:#f59e0b;">Max</th>
+          <th style="color:#10b981;">Avg</th><th style="color:#10b981;">Min</th><th style="color:#10b981;">Max</th>
+          <th style="color:#a855f7;">Avg</th><th style="color:#a855f7;">Min</th><th style="color:#a855f7;">Max</th>
+        </tr>
+      </thead>
+      <tbody id="loopMetricsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- LIP Test Boundaries -->
+  <div class="section-title" style="margin-bottom:6px;">LIP Test Boundaries
+    <span id="lipBoundaryNote" style="font-size:0.75rem; font-weight:400; color:#6b7280; margin-left:8px;"></span>
+  </div>
+  <div class="table-wrap" style="margin-bottom:20px; overflow-x:auto;">
+    <table>
+      <thead id="lipBoundaryHead"></thead>
+      <tbody id="lipBoundaryBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Raw Loop Debug Data -->
+  <details>
+    <summary class="subtle" style="cursor:pointer; user-select:none; margin-bottom:8px;">&#9654; Raw Loop Debug Data</summary>
+    <pre class="kv-block" id="loopDebugBlock">-</pre>
+  </details>
 </div>

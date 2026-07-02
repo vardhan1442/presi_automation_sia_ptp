@@ -1,0 +1,66 @@
+<!-- Xmon Performance Counters + SOC Latency Metrics -->
+<!-- xmon from pons_verification.py (get_xmon_info) -->
+<!-- latency from get_data_latency — SOC_ICELAND MSC hit/miss latencies -->
+
+<div class="two-col">
+
+  <!-- Xmon Performance Counters -->
+  <div class="table-card">
+    <div class="section-title">Xmon Performance Counters
+      <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+        Register read values from xmon.log (pons_verification.py only)
+      </span>
+    </div>
+
+    <div id="xmonChartWrap" style="width:100%;height:220px;margin-bottom:12px;display:none;"></div>
+    <div id="xmonNoData" style="color:#6b7280;font-size:0.88rem;padding:10px 0;">
+      No xmon data. Run pons_verification.py to collect performance counter register values.
+    </div>
+
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th style="color:#34d399;">Register Address</th>
+            <th style="color:#60a5fa;">Value</th>
+          </tr>
+        </thead>
+        <tbody id="xmonBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SOC Latency Metrics -->
+  <div class="table-card">
+    <div class="section-title">SOC Latency Metrics
+      <span style="font-size:0.75rem;font-weight:400;color:#6b7280;margin-left:8px;">
+        Average latency from cfi_latency_mufasa_hit_miss/tmp_idi_lat.txt
+      </span>
+    </div>
+
+    <div id="latencyChartWrap" style="width:100%;height:220px;margin-bottom:12px;display:none;"></div>
+    <div id="latencyNoData" style="color:#6b7280;font-size:0.88rem;padding:10px 0;">
+      No latency data. Run pons_verification.py on a run with latency tracker files.
+    </div>
+
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th style="color:#60a5fa;">Value</th>
+          </tr>
+        </thead>
+        <tbody id="latencyBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Xmon bar chart full width (shown when enough counters exist) -->
+<div class="panel" id="xmonFullChartPanel" style="margin-top:16px; display:none;">
+  <div class="section-title">Xmon Counter Values — Overview Chart</div>
+  <div id="xmonFullChart" style="width:100%;height:300px;"></div>
+</div>

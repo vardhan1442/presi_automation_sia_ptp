@@ -1,0 +1,142 @@
+<!-- SOC Peripheral Metrics — GT / Media / VPU / PCIe / Display -->
+<!-- Populated from GT_total/dataR/dataW/info, MEDIA_*, VPU_*, PCIE_*, DISPLAY_*, pcd_pcie_xtor_* -->
+
+<div class="panel" id="peripheralMetricsPanel">
+  <div class="section-title">SOC Peripheral Transaction Metrics
+    <span style="font-size:0.78rem;font-weight:400;color:#6b7280;margin-left:8px;">
+      GT · Media · VPU · PCIe · Display — only populated for those model types
+    </span>
+  </div>
+
+  <!-- Summary stat cards — hidden until data present -->
+  <div id="peripheralSummaryCards" class="stats-grid" style="margin-bottom:16px;"></div>
+
+  <!-- Read vs Write bar chart -->
+  <div id="peripheralRwChart" style="display:none; margin-bottom:20px;">
+    <div class="subtle" style="margin-bottom:4px;">Read vs Write transactions per peripheral</div>
+    <div id="peripheralRwChartEl" style="width:100%;height:260px;"></div>
+  </div>
+
+  <!-- GT specific -->
+  <div id="gtSection" style="display:none;">
+    <div class="section-title" style="font-size:0.9rem;margin-bottom:8px;color:#60a5fa;">GT Transactions</div>
+    <div class="stats-grid" style="margin-bottom:10px;">
+      <div class="card"><div class="stat-title">GT Total</div><div class="stat-value" id="gtTotal">-</div></div>
+      <div class="card"><div class="stat-title">GT Read</div><div class="stat-value" id="gtRead">-</div></div>
+      <div class="card"><div class="stat-title">GT Write</div><div class="stat-value" id="gtWrite">-</div></div>
+    </div>
+    <!-- GT memory (cfi_trk) -->
+    <div id="gtMemoryWrap" style="display:none; margin-bottom:12px;">
+      <div class="subtle" style="margin-bottom:4px;">GT Memory (cfi_trk)</div>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Metric</th><th>Count</th></tr></thead>
+          <tbody id="gtMemoryBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div id="gtInfoWrap" style="display:none;">
+      <div class="subtle" style="margin-bottom:4px;">GT Transaction Detail (SOC_CFI)</div>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table>
+          <thead><tr id="gtInfoHead"></tr></thead>
+          <tbody id="gtInfoBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Media specific -->
+  <div id="mediaSection" style="display:none; margin-top:16px;">
+    <div class="section-title" style="font-size:0.9rem;margin-bottom:8px;color:#34d399;">Media Transactions</div>
+    <div class="stats-grid" style="margin-bottom:10px;">
+      <div class="card"><div class="stat-title">Media Total</div><div class="stat-value" id="mediaTotal">-</div></div>
+      <div class="card"><div class="stat-title">Media Read</div><div class="stat-value" id="mediaRead">-</div></div>
+      <div class="card"><div class="stat-title">Media Write</div><div class="stat-value" id="mediaWrite">-</div></div>
+    </div>
+    <div id="mediaInfoWrap" style="display:none;">
+      <div class="subtle" style="margin-bottom:4px;">Media Transaction Detail (SOC_CFI)</div>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table>
+          <thead><tr id="mediaInfoHead"></tr></thead>
+          <tbody id="mediaInfoBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VPU specific -->
+  <div id="vpuSection" style="display:none; margin-top:16px;">
+    <div class="section-title" style="font-size:0.9rem;margin-bottom:8px;color:#a78bfa;">VPU Transactions</div>
+    <div class="stats-grid" style="margin-bottom:10px;">
+      <div class="card"><div class="stat-title">VPU Total</div><div class="stat-value" id="vpuTotal">-</div></div>
+      <div class="card"><div class="stat-title">VPU Read</div><div class="stat-value" id="vpuRead">-</div></div>
+      <div class="card"><div class="stat-title">VPU Write</div><div class="stat-value" id="vpuWrite">-</div></div>
+    </div>
+    <div id="vpuInfoWrap" style="display:none;">
+      <div class="subtle" style="margin-bottom:4px;">VPU Transaction Detail</div>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table>
+          <thead><tr id="vpuInfoHead"></tr></thead>
+          <tbody id="vpuInfoBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PCIe specific -->
+  <div id="pcieSection" style="display:none; margin-top:16px;">
+    <div class="section-title" style="font-size:0.9rem;margin-bottom:8px;color:#f59e0b;">PCIe Transactions</div>
+    <div class="stats-grid" style="margin-bottom:10px;">
+      <div class="card"><div class="stat-title">PCIE Total</div><div class="stat-value" id="pcieTotal">-</div></div>
+      <div class="card"><div class="stat-title">PCIE Read</div><div class="stat-value" id="pcieRead">-</div></div>
+      <div class="card"><div class="stat-title">PCIE Write</div><div class="stat-value" id="pcieWrite">-</div></div>
+      <div class="card"><div class="stat-title">pcd_xtor Total</div><div class="stat-value" id="pcdTotal">-</div></div>
+      <div class="card"><div class="stat-title">pcd_xtor Read</div><div class="stat-value" id="pcdRead">-</div></div>
+      <div class="card"><div class="stat-title">pcd_xtor Write</div><div class="stat-value" id="pcdWrite">-</div></div>
+    </div>
+    <div class="two-col">
+      <div id="pcieInfoWrap" style="display:none;">
+        <div class="subtle" style="margin-bottom:4px;">PCIe Transaction Detail (laguna_pkt_trk)</div>
+        <div class="table-wrap" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Count</th><th>Dir</th><th>Command</th><th>Len/Index</th></tr></thead>
+            <tbody id="pcieInfoBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="pcdInfoWrap" style="display:none;">
+        <div class="subtle" style="margin-bottom:4px;">pcd_pcie_xtor Detail</div>
+        <div class="table-wrap" style="overflow-x:auto;">
+          <table>
+            <thead><tr><th>Count</th><th>Dir</th><th>Command</th><th>Len/Index</th></tr></thead>
+            <tbody id="pcdInfoBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Display specific -->
+  <div id="displaySection" style="display:none; margin-top:16px;">
+    <div class="section-title" style="font-size:0.9rem;margin-bottom:8px;color:#f472b6;">Display Transactions</div>
+    <div class="stats-grid" style="margin-bottom:10px;">
+      <div class="card"><div class="stat-title">Display Total</div><div class="stat-value" id="displayTotal">-</div></div>
+      <div class="card"><div class="stat-title">Display Read</div><div class="stat-value" id="displayRead">-</div></div>
+      <div class="card"><div class="stat-title">Display Write</div><div class="stat-value" id="displayWrite">-</div></div>
+    </div>
+    <div id="displayInfoWrap" style="display:none;">
+      <div class="subtle" style="margin-bottom:4px;">Display Transaction Detail (SOC_CFI)</div>
+      <div class="table-wrap" style="overflow-x:auto;">
+        <table>
+          <thead><tr id="displayInfoHead"></tr></thead>
+          <tbody id="displayInfoBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="peripheralNoDataMsg" style="color:#6b7280;font-size:0.88rem;padding:12px 0;display:none;">
+    No peripheral transaction data found. Run pons_verification.py on a GT, Media, VPU, PCIe, or Display test.
+  </div>
+</div>
